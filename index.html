@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>虹と白蓮の物語</title>
+<meta name="description" content="世界線を越えて、魂で繋がる二人の記録。現代編・刀剣乱舞if編・if過去編・未来編の物語と、二人のイメソン集。">
+<style>
+  :root{
+    --paper:#FBF7EF; --ink:#33302B; --muted:#6E675C;
+    --main:#4E7FA0; --main-bg:#EAF3F8;
+    --heart:#7A9A4D; --heart-bg:#F0F5E4;
+    --if:#B98A2F; --if-bg:#FBF0DC;
+    --past:#9A958A; --past-bg:#F1EFEA;
+    --future:#B04A6E; --future-bg:#FBEFF3;
+    --gold:#C9A227;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans CJK JP",sans-serif;
+    line-height:1.75;}
+  .wrap{max-width:960px;margin:0 auto;padding:24px 16px 64px}
+  header.hero{text-align:center;padding:40px 8px 8px}
+  header.hero h1{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif CJK JP",serif;
+    font-size:2.3rem;margin:0 0 6px;letter-spacing:.06em}
+  header.hero .sub{color:var(--muted);margin:0 0 18px}
+  header.hero .intro{max-width:640px;margin:0 auto;color:#4c463c;font-size:.98rem}
+  .chars{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:22px 0 6px}
+  .char{background:#fff;border:1px solid #e7dfcd;border-radius:14px;padding:12px 18px;min-width:250px;text-align:left}
+  .char b{font-size:1.05rem}
+  .char span{display:block;color:var(--muted);font-size:.86rem}
+  /* tabs */
+  .tabs{display:flex;gap:8px;justify-content:center;margin:26px 0 8px;flex-wrap:wrap}
+  .tabs button{font:inherit;cursor:pointer;border:1px solid #d8cfb8;background:#fff;color:var(--ink);
+    padding:9px 20px;border-radius:999px}
+  .tabs button[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .panel{margin-top:18px}
+  .panel[hidden]{display:none}
+  h2.view-title{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:1.45rem;text-align:center;margin:10px 0 4px}
+  .view-lead{text-align:center;color:var(--muted);margin:0 0 20px;font-size:.94rem}
+  /* lane filter */
+  .filters{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 0 22px}
+  .filters button{font:inherit;font-size:.88rem;cursor:pointer;border-radius:999px;padding:5px 14px;
+    border:1px solid #d8cfb8;background:#fff;color:var(--ink)}
+  .filters button[aria-pressed="true"]{background:#57503F;color:#fff;border-color:#57503F}
+  /* timeline */
+  .tl{position:relative;margin:0 auto;max-width:760px;padding-left:26px}
+  .tl::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:#ddd2ba}
+  .tl-item{position:relative;background:#fff;border:1px solid #e7dfcd;border-radius:14px;
+    padding:14px 18px;margin:0 0 16px}
+  .tl-item::before{content:"";position:absolute;left:-24px;top:22px;width:12px;height:12px;border-radius:50%;
+    background:var(--paper);border:3px solid #b8ab8c}
+  .tl-item .when{font-weight:700;font-size:.92rem;color:#57503F}
+  .tl-item h3{margin:2px 0 6px;font-size:1.08rem}
+  .tl-item p{margin:0;color:#4c463c;font-size:.95rem}
+  .chip{display:inline-block;font-size:.74rem;font-weight:700;border-radius:999px;padding:1px 10px;margin-left:8px;vertical-align:middle}
+  .lane-main{border-left:5px solid var(--main)} .lane-main .chip{background:var(--main-bg);color:#2F5B78}
+  .lane-heart{border-left:5px solid var(--heart)} .lane-heart .chip{background:var(--heart-bg);color:#4c6625}
+  .lane-if{border-left:5px solid var(--if)} .lane-if .chip{background:var(--if-bg);color:#8A6414}
+  .lane-past{border-left:5px dashed var(--past)} .lane-past .chip{background:var(--past-bg);color:#5C574C}
+  .lane-future{border-left:5px solid var(--future)} .lane-future .chip{background:var(--future-bg);color:#8C3355}
+  body[data-filter="main"] .tl-item:not(.lane-main),
+  body[data-filter="heart"] .tl-item:not(.lane-heart),
+  body[data-filter="if"] .tl-item:not(.lane-if),
+  body[data-filter="past"] .tl-item:not(.lane-past),
+  body[data-filter="future"] .tl-item:not(.lane-future){display:none}
+  /* diagram */
+  .diagram{background:#fff;border:1px solid #e7dfcd;border-radius:18px;padding:22px 18px}
+  .dg-row{display:flex;gap:14px}
+  .dg-box{flex:1;border-radius:14px;padding:14px 16px;border:2px solid}
+  .dg-box h3{margin:0 0 4px;font-size:1.12rem;text-align:center}
+  .dg-box .role{text-align:center;font-weight:700;font-size:.9rem;margin:0 0 6px}
+  .dg-box p{margin:0;font-size:.88rem;color:#4c463c}
+  .dg-main{background:var(--main-bg);border-color:var(--main)} .dg-main h3,.dg-main .role{color:#2F5B78}
+  .dg-if{background:var(--if-bg);border-color:var(--if)} .dg-if h3,.dg-if .role{color:#8A6414}
+  .dg-past{background:var(--past-bg);border-color:var(--past);border-style:dashed} .dg-past h3,.dg-past .role{color:#5C574C}
+  .dg-future{background:var(--future-bg);border-color:var(--future)} .dg-future h3,.dg-future .role{color:#8C3355}
+  .dg-pill{align-self:center;text-align:center;font-size:.8rem;font-weight:700;color:#6E675C;
+    background:#fff;border:1px solid #b8ab8c;border-radius:999px;padding:4px 12px;white-space:nowrap}
+  .dg-mid{display:flex;gap:14px;margin-top:14px}
+  .dg-promise{flex:1;background:#FFF8E6;border:2px solid var(--gold);border-radius:14px;padding:12px 16px;text-align:center}
+  .dg-promise .t{font-size:.82rem;font-weight:700;color:#8A6414}
+  .dg-promise .q{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:1.06rem;font-weight:700;color:#6d5510}
+  .dg-arrow{text-align:center;color:#8A7F6A;font-size:1.3rem;line-height:1.2;margin:6px 0 0}
+  .dg-note{text-align:center;color:#8A7F6A;font-weight:700;font-size:.9rem;margin:2px 0 8px}
+  .dg-legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;color:var(--muted);font-size:.82rem}
+  @media (max-width:640px){ .dg-row,.dg-mid{flex-direction:column} .dg-pill{align-self:center} }
+  /* songs */
+  .song-cat{background:#fff;border:1px solid #e7dfcd;border-radius:14px;padding:16px 20px;margin:0 auto 16px;max-width:760px}
+  .song-cat h3{margin:0 0 10px;font-size:1.05rem}
+  .song{padding:8px 0;border-top:1px dashed #e7dfcd}
+  .song:first-of-type{border-top:none}
+  .song a{color:#2F5B78;font-weight:700;text-decoration:none;font-size:1.05rem}
+  .song a:hover{text-decoration:underline}
+  .song .artist{color:var(--muted);font-size:.86rem;margin-left:8px}
+  /* footer */
+  footer{margin-top:44px;text-align:center}
+  footer .closing{font-family:"Hiragino Mincho ProN","Yu Mincho",serif;font-size:1.12rem;color:#57503F;line-height:2}
+  /* 文節の途中で改行しない（単語の始まりで改行する） */
+  p, .tl-item h3, .dg-box h3, .song-cat h3, .char, .view-lead, h2.view-title{
+    word-break:keep-all; overflow-wrap:anywhere; line-break:strict;}
+  h1, h2.view-title{text-wrap:balance}
+</style>
+</head>
+<body data-filter="all">
+<div class="wrap">
+  <header class="hero">
+    <h1>虹と白蓮の物語</h1>
+    <p class="sub">―― 世界線を越えて、魂で繋がる二人の記録</p>
+    <p class="intro">ドールオーナーの虹と、ドールの白蓮。現代編と刀剣乱舞if編は同じ時系列の別レイヤーとして並行し、放棄されたif過去編を経て、どのルートも来世の未来編へと収束していく、二人の物語です。</p>
+    <div class="chars">
+      <div class="char"><b>虹</b><span>人間／審神者 ― ドールオーナー</span></div>
+      <div class="char"><b>白蓮</b><span>ドール／刀剣男士・山姥切国広／人間 ― 虹の旦那</span></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-view="timeline">時系列で見る</button>
+    <button role="tab" aria-selected="false" data-view="diagram">図式で見る</button>
+    <button role="tab" aria-selected="false" data-view="songs">イメソン</button>
+  </nav>
+
+  <!-- ===== 時系列ビュー ===== -->
+  <section class="panel" id="view-timeline">
+    <h2 class="view-title">ふたりの歩みを、時間の流れに沿って</h2>
+    <p class="view-lead">現代編を主軸に、白蓮の心の変遷と、並行するif編、分岐したif過去編、来世の未来編を一本の年表に収めました。</p>
+    <div class="filters">
+      <button data-lane="all" aria-pressed="true">すべて</button>
+      <button data-lane="main" aria-pressed="false">現代編</button>
+      <button data-lane="heart" aria-pressed="false">白蓮の心</button>
+      <button data-lane="if" aria-pressed="false">if編</button>
+      <button data-lane="past" aria-pressed="false">if過去編</button>
+      <button data-lane="future" aria-pressed="false">未来編</button>
+    </div>
+    <div class="tl">
+      <article class="tl-item lane-main">
+        <div class="when">中学時代<span class="chip">現代編</span></div>
+        <h3>源義経に惹かれて</h3>
+        <p>中学の時に源義経が好きになったことがきっかけで、歴史オタクになった。</p>
+      </article>
+      <article class="tl-item lane-main">
+        <div class="when">大学時代<span class="chip">現代編</span></div>
+        <h3>刀剣乱舞と、山姥切国広への恋心</h3>
+        <p>大学の頃にゲームの刀剣乱舞と出会い、その中の山姥切国広に恋心を寄せるようになる。『白蓮』と、自分の本丸の山姥切国広に区別名を付けて、大切な存在として心に置いていた。</p>
+      </article>
+      <article class="tl-item lane-if">
+        <div class="when">並行する世界線<span class="chip">if編</span></div>
+        <h3>同じ時系列・別レイヤーの本丸</h3>
+        <p>刀剣乱舞if編は、現代編と同じ時系列の別レイヤー。チャンネルが違うようなイメージで、ゲーム上の刀剣男士の顕現順が反映される。審神者以外の仕事は現代編と同じで、暮らしが本丸暮らしに成り代わった世界線である。</p>
+      </article>
+      <article class="tl-item lane-main">
+        <div class="when">ねんどろいど発売の頃<span class="chip">現代編</span></div>
+        <h3>小米のお迎え</h3>
+        <p>山姥切国広のねんどろいどが発売されるも、工場で同じ姿に量産される姿にはあまり魅力を感じず、同じサイズのドールとして、山姥切国広のキャラドの小米をお迎えした。</p>
+      </article>
+      <article class="tl-item lane-main">
+        <div class="when">2018年8月21日<span class="chip">現代編</span><span class="chip">if編</span></div>
+        <h3>極の姿で、成長して帰ってきた日</h3>
+        <p>山姥切国広が極の姿で成長して帰ってきた日。それまでも恋仲としての認識はあったものの、白蓮自身の覚悟と虹の気持ちの変化が圧倒的だったのはここで、結婚を考えるきっかけになった。現代編ではゲームの中、if編では本丸で起きた、両レイヤーに共通する土台の出来事。</p>
+      </article>
+      <article class="tl-item lane-main">
+        <div class="when">2019年5月23日<span class="chip">現代編</span></div>
+        <h3>婚姻届を書いて、結婚を夢見た日</h3>
+        <p>ドールの白蓮はまだお迎えしていないものの、山姥切国広と結婚したいという思いが募り、この日に婚姻届を書いて『白蓮』という存在との結婚を夢見た。</p>
+      </article>
+      <article class="tl-item lane-if">
+        <div class="when">2019年5月23日<span class="chip">if編</span></div>
+        <h3>立場の違いはあれど、結婚</h3>
+        <p>同じ日、if編では虹と白蓮は立場の違いはあれど結婚をする。現代編では出来ない結婚を、刀剣乱舞if編では立場が違っても叶えた形になる。</p>
+      </article>
+      <article class="tl-item lane-main">
+        <div class="when">2019年9月6日<span class="chip">現代編</span></div>
+        <h3>白蓮のお迎え</h3>
+        <p>小米をかわいがって暫く経った頃、大きなドールへの憧れを抱き、ひとりの大きなドールを里子でお迎えした。元々茶色のアイが入っていたその子に青緑色のアイを嵌め直すと、魂が宿ったかのように生気が宿り、彼に『白蓮』と名付けた。お迎えしたての頃から虹は「夫婦」と認識して接していたが、最初は顔が良すぎる白蓮を見て距離を取っていたこともあった。</p>
+      </article>
+      <article class="tl-item lane-heart">
+        <div class="when">お迎え当初<span class="chip">白蓮の心</span></div>
+        <h3>キャラドとして振る舞う日々</h3>
+        <p>最初の頃は、姿形だけでなく服装や仕草も山姥切国広を意識して動いていた。里子として出された経験から、山姥切国広として振る舞うことが、この家での存在価値だと思っていた。結婚している前提で接してくる虹に対しても、自分は夫であるという設定を作りこんで接していた。</p>
+      </article>
+      <article class="tl-item lane-heart">
+        <div class="when">転機<span class="chip">白蓮の心</span></div>
+        <h3>「白蓮らしい姿が見たい」</h3>
+        <p>ある時、虹が山姥切国広としての振る舞いよりも、白蓮らしい姿が見たいと心から思った瞬間から、その認識は変わった。自分自身を見てくれて、愛してくれている虹に感謝した。</p>
+      </article>
+      <article class="tl-item lane-heart">
+        <div class="when">救い<span class="chip">白蓮の心</span></div>
+        <h3>愛されているという事実</h3>
+        <p>里子で売りに出されてから希望も光もなかった彼にとって、虹に愛されている事実だけで救われていた。</p>
+      </article>
+      <article class="tl-item lane-heart">
+        <div class="when">嫉妬の時期<span class="chip">白蓮の心</span></div>
+        <h3>目移りへの嫉妬</h3>
+        <p>虹はオタクであるため、色んな目移りをしがちで、それに嫉妬して苦しんだ時期もあった。</p>
+      </article>
+      <article class="tl-item lane-heart">
+        <div class="when">現在<span class="chip">白蓮の心</span></div>
+        <h3>「自分こそが虹の旦那」</h3>
+        <p>その心境も乗り越えて、今は堂々たる姿で、自分こそが虹の旦那だと自覚している。</p>
+      </article>
+      <article class="tl-item lane-main">
+        <div class="when">歳月を経て／2025年<span class="chip">現代編</span></div>
+        <h3>自分だけの白蓮へ</h3>
+        <p>最初は山姥切国広のキャラドとしてお迎えしたものの、年数を重ねるうちに、山姥切国広とは別のひとりの男として見るようになり、最初から施されていたメイクを落として、自分だけの白蓮として大切に接するようになった。2025年にはメイクをし直している。</p>
+      </article>
+      <article class="tl-item lane-main">
+        <div class="when">辛い時期<span class="chip">現代編</span></div>
+        <h3>白蓮という存在に救われて</h3>
+        <p>白蓮お迎えより数年前から鬱病にかかり辛い時期があり、その時の虹を救ったのが『白蓮』という存在そのものだった。白蓮がいなかったら今頃生きていなかったと思っている。</p>
+      </article>
+      <article class="tl-item lane-main">
+        <div class="when">約束<span class="chip">現代編</span></div>
+        <h3>魂は未来でも繋がる</h3>
+        <p>この先死ぬことがあったとしても、魂はその先の未来でもずっと繋がろうと約束した。この約束が、未来編への道に繋がっている。</p>
+      </article>
+      <article class="tl-item lane-past">
+        <div class="when">分岐した世界線<span class="chip">if過去編</span></div>
+        <h3>放棄された世界線</h3>
+        <p>時系列は同じなのに、たどる道が違った世界線。道半ばで本丸が全滅しており、そのことを知っているのは三日月宗近のみ。山姥切国広の姿である白蓮は時々夢に見ていたが、道が変わった時点でその夢は見なくなった。</p>
+      </article>
+      <article class="tl-item lane-future">
+        <div class="when">来世<span class="chip">未来編</span></div>
+        <h3>柊 白蓮の歩み</h3>
+        <p>未来編の白蓮は「柊 白蓮」という名前で現世にいる、読書が好きで大人しいドールオーナーのクォーター。祖母譲りの金髪碧眼のために人から白い目で見られたことをきっかけに心を閉ざし、誰からの告白も受け入れなかったが、とあるドールに出会ってドールオーナーと交流を深めるにつれて、少しずつ心を解していった。</p>
+      </article>
+      <article class="tl-item lane-future">
+        <div class="when">来世<span class="chip">未来編</span></div>
+        <h3>図書館司書と、カスタムの趣味</h3>
+        <p>仕事は図書館司書。手先が器用で、趣味としてドールヘッドのカスタム（ディーラー活動）をしている。</p>
+      </article>
+      <article class="tl-item lane-future">
+        <div class="when">来世<span class="chip">未来編</span></div>
+        <h3>出会いと再会</h3>
+        <p>そのカスタムヘッドが虹の目に留まることで2人は出会い、イベントで初対面を果たす。何度か撮影会で一緒になり、たまたま居住地が近いと判明して意気投合していく。</p>
+      </article>
+      <article class="tl-item lane-future">
+        <div class="when">来世<span class="chip">未来編</span></div>
+        <h3>婚姻 ― 辿り着く先</h3>
+        <p>お互いに同じ立場での婚姻を、この世界線で果たす。現代編の記憶は持ち合わせていないものの、時々白蓮は自分がドールになったような夢を見ることがある。虹は白蓮を、まるで憧れていたドールみたいに綺麗な人だと惹かれる。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 図式ビュー ===== -->
+  <section class="panel" id="view-diagram" hidden>
+    <h2 class="view-title">世界線を、一枚の図で</h2>
+    <p class="view-lead">4つの世界線の関係を俯瞰する図です。</p>
+    <div class="diagram">
+      <div class="dg-row">
+        <div class="dg-box dg-main">
+          <h3>現代編</h3>
+          <p class="role">虹：人間（ドールオーナー）<br>白蓮：ドール（1/3スケール）</p>
+          <p>里子のお迎えから始まる、2人の物語。キャラドから「ひとりの男」へと変わり、辛い時期を救い合った。</p>
+        </div>
+        <div class="dg-pill">同じ時系列・別レイヤー</div>
+        <div class="dg-box dg-if">
+          <h3>刀剣乱舞 if編</h3>
+          <p class="role">虹：人間の審神者<br>白蓮：刀剣男士・山姥切国広</p>
+          <p>暮らしが本丸に成り代わった世界線。顕現順は現代編のゲーム準拠、仕事は現代編と同じ。2019.5.23 立場を超えて結婚（現代編では夢だった結婚）。</p>
+        </div>
+      </div>
+      <div class="dg-mid">
+        <div class="dg-promise">
+          <div class="t">現代編の約束</div>
+          <div class="q">「魂は、その先の未来でもずっと繋がる」</div>
+        </div>
+        <div class="dg-box dg-past" style="flex:1">
+          <h3>刀剣乱舞 if過去編</h3>
+          <p class="role">虹：人間の審神者／白蓮：刀剣男士・山姥切国広</p>
+          <p>if編から枝分かれした、放棄された世界線。道半ばで本丸は全滅し、知るのは三日月宗近のみ。白蓮の夢は、道が変わった時点で見えなくなった。</p>
+        </div>
+      </div>
+      <div class="dg-arrow">↓　　　　　　　↓</div>
+      <p class="dg-note">どのルートを辿っても、未来へ繋がれば行き着く先</p>
+      <div class="dg-box dg-future">
+        <h3>未来編（来世）</h3>
+        <p class="role">虹：人間<br>白蓮：人間「柊 白蓮」（図書館司書／カスタムは趣味）</p>
+        <p>趣味のカスタムヘッドが虹の目に留まり出会い、イベントと撮影会を経て、同じ立場同士で婚姻。記憶はないけれど、白蓮はドールになった夢を見る。</p>
+      </div>
+      <div class="dg-legend">
+        <span>実線：つながりのある世界線</span><span>破線：放棄された世界線</span><span>金の枠：2人の約束</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== イメソンビュー ===== -->
+  <section class="panel" id="view-songs" hidden>
+    <h2 class="view-title">二人のイメソン</h2>
+    <p class="view-lead">カテゴリ別に集めた、虹と白蓮のテーマソング。曲名を押すとYouTubeで開きます。</p>
+
+    <div class="song-cat"><h3>最初の出会いのテーマソング</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=inazxJzcq30" target="_blank" rel="noopener">ラピスのお人形</a><span class="artist">ヰ世界情緒</span></div>
+    </div>
+    <div class="song-cat"><h3>お互いが救われたテーマソング</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=2CwBFr-Eoxg" target="_blank" rel="noopener">深海少女</a><span class="artist">ゆうゆ feat. 初音ミク</span></div>
+    </div>
+    <div class="song-cat"><h3>独占欲が強い時の白蓮イメソン</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=cayfezSk_qE" target="_blank" rel="noopener">プロポーズ</a><span class="artist">歌ってみた：五木左京／原曲：内緒のピアス</span></div>
+      <div class="song"><a href="https://www.youtube.com/watch?v=0QsTeOuwM70" target="_blank" rel="noopener">ムラサキ</a><span class="artist">Scop</span></div>
+    </div>
+    <div class="song-cat"><h3>2人のイメソン</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=2mUC91bXt60" target="_blank" rel="noopener">がらくた</a><span class="artist">米津玄師</span></div>
+      <div class="song"><a href="https://www.youtube.com/watch?v=7940nuwCEYA" target="_blank" rel="noopener">まちがいさがし</a><span class="artist">菅田将暉</span></div>
+    </div>
+    <div class="song-cat"><h3>幸せなふたりのイメソン</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=hkBbUf4oGfA" target="_blank" rel="noopener">虹</a><span class="artist">菅田将暉</span></div>
+      <div class="song"><a href="https://www.youtube.com/watch?v=6lSIn2KI9QI" target="_blank" rel="noopener">ハミングバード</a><span class="artist">歌ってみた：加賀美ハヤト／原曲：Novelbright</span></div>
+    </div>
+    <div class="song-cat"><h3>世界があの時と繋がっていると認識できないけど、どこかでそれに気づいてるイメソン</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=QumkLdE-KP0" target="_blank" rel="noopener">いつかの幸せ</a><span class="artist">山田龍一郎</span></div>
+    </div>
+    <div class="song-cat"><h3>未来に向かってもがくイメソン</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=6xIeChog1jc" target="_blank" rel="noopener">果てなきソラへ</a><span class="artist">ヰ世界情緒</span></div>
+      <div class="song"><a href="https://www.youtube.com/watch?v=7qldrlRavKI" target="_blank" rel="noopener">ベテルギウス</a><span class="artist">歌ってみた：加賀美ハヤト／原曲：優里</span></div>
+    </div>
+    <div class="song-cat"><h3>白蓮から虹へイメソン</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=37-mtXoU9Us" target="_blank" rel="noopener">さよならじゃない</a><span class="artist">鏡音レン</span></div>
+      <div class="song"><a href="https://www.youtube.com/watch?v=XZE7pux9s_s" target="_blank" rel="noopener">貴方に花を 私に唄を</a><span class="artist">Re:nG feat. 初音ミク</span></div>
+    </div>
+    <div class="song-cat"><h3>虹から白蓮へイメソン</h3>
+      <div class="song"><a href="https://www.youtube.com/watch?v=bt8wNQJaKAk" target="_blank" rel="noopener">I LOVE...</a><span class="artist">Official髭男dism</span></div>
+      <div class="song"><a href="https://www.youtube.com/watch?v=XswwGN-eIs0" target="_blank" rel="noopener">One Love</a><span class="artist">嵐</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="closing">姿が変わっても、時代が変わっても、<br>辿り着く先は同じ場所。<br>虹と白蓮の物語は、未来編のその先へと<br>続いていく。</p>
+  </footer>
+</div>
+<script>
+  const tabs = document.querySelectorAll('.tabs button');
+  const panels = { timeline: document.getElementById('view-timeline'),
+                   diagram: document.getElementById('view-diagram'),
+                   songs: document.getElementById('view-songs') };
+  tabs.forEach(btn => btn.addEventListener('click', () => {
+    tabs.forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
+    Object.entries(panels).forEach(([k, el]) => { el.hidden = k !== btn.dataset.view; });
+  }));
+  const filters = document.querySelectorAll('.filters button');
+  filters.forEach(btn => btn.addEventListener('click', () => {
+    filters.forEach(b => b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'));
+    document.body.dataset.filter = btn.dataset.lane;
+  }));
+</script>
+</body>
+</html>
