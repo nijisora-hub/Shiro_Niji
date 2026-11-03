@@ -16,6 +16,7 @@
     --gold:#C9A227;
   }
   *{box-sizing:border-box}
+  html{font-size:15px}
   body{margin:0;background:var(--paper);color:var(--ink);
     font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans CJK JP",sans-serif;
     line-height:1.75;}
@@ -100,6 +101,16 @@
   p, .tl-item h3, .dg-box h3, .song-cat h3, .char, .view-lead, h2.view-title{
     word-break:keep-all; overflow-wrap:anywhere; line-break:strict;}
   h1, h2.view-title{text-wrap:balance}
+  /* 句読点や単語のつながりの悪いところで改行しない。短い要素は折り返さず1行に収める */
+  .tl-item .when, .chip, .tabs button, .filters button, .dg-pill,
+  .dg-promise .q, footer .closing, .song a{white-space:nowrap}
+  /* 文節単位で改行させる（句読点が行頭に来ないようにする） */
+  .ph{white-space:nowrap}
+  .song{display:flex;align-items:baseline;gap:2px;flex-wrap:nowrap;overflow:hidden}
+  .tl-item h3, .dg-box h3, .song-cat h3{line-break:strict}
+  /* 句読点だけの行を作らない：行の配分を整える */
+  .tl-item p, .dg-box p, .intro, .char span, .view-lead{text-wrap:pretty}
+  .tl-item h3, .dg-box h3, .song-cat h3, .dg-promise .q{text-wrap:balance}
 </style>
 </head>
 <body data-filter="all">
@@ -156,7 +167,7 @@
       <article class="tl-item lane-main">
         <div class="when">2018年8月21日<span class="chip">現代編</span><span class="chip">if編</span></div>
         <h3>極の姿で、成長して帰ってきた日</h3>
-        <p>山姥切国広が極の姿で成長して帰ってきた日。それまでも恋仲としての認識はあったものの、白蓮自身の覚悟と虹の気持ちの変化が圧倒的だったのはここで、結婚を考えるきっかけになった。現代編ではゲームの中、if編では本丸で起きた、両レイヤーに共通する土台の出来事。</p>
+        <p><span class="ph">山姥切国広が</span><span class="ph">極の姿で</span><span class="ph">成長して</span><span class="ph">帰ってきた日。</span><span class="ph">それまでも</span><span class="ph">恋仲としての</span><span class="ph">認識はあったものの、</span><span class="ph">白蓮自身の</span><span class="ph">覚悟と</span><span class="ph">虹の気持ちの</span><span class="ph">変化が</span><span class="ph">圧倒的だったのは</span><span class="ph">ここで、</span><span class="ph">結婚を考える</span><span class="ph">きっかけになった。</span><span class="ph">現代編では</span><span class="ph">ゲームの中、</span><span class="ph">if編では</span><span class="ph">本丸で起きた、</span><span class="ph">両レイヤーに</span><span class="ph">共通する</span><span class="ph">土台の出来事。</span></p>
       </article>
       <article class="tl-item lane-main">
         <div class="when">2019年5月23日<span class="chip">現代編</span></div>
@@ -344,3 +355,5 @@
 </script>
 </body>
 </html>
+
+<!-- deploy refresh 2026-11-04 -->
