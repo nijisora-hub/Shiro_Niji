@@ -106,6 +106,9 @@
   .dg-promise .q, footer .closing, .song a{white-space:nowrap}
   .song{display:flex;align-items:baseline;gap:2px;flex-wrap:nowrap;overflow:hidden}
   .tl-item h3, .dg-box h3, .song-cat h3{line-break:strict}
+  /* 句読点だけの行を作らない：行の配分を整える */
+  .tl-item p, .dg-box p, .intro, .char span, .view-lead{text-wrap:pretty}
+  .tl-item h3, .dg-box h3, .song-cat h3, .dg-promise .q{text-wrap:balance}
 </style>
 </head>
 <body data-filter="all">
