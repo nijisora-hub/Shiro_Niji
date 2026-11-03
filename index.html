@@ -16,6 +16,7 @@
     --gold:#C9A227;
   }
   *{box-sizing:border-box}
+  html{font-size:15px}
   body{margin:0;background:var(--paper);color:var(--ink);
     font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans CJK JP",sans-serif;
     line-height:1.75;}
@@ -100,6 +101,11 @@
   p, .tl-item h3, .dg-box h3, .song-cat h3, .char, .view-lead, h2.view-title{
     word-break:keep-all; overflow-wrap:anywhere; line-break:strict;}
   h1, h2.view-title{text-wrap:balance}
+  /* 句読点や単語のつながりの悪いところで改行しない。短い要素は折り返さず1行に収める */
+  .tl-item .when, .chip, .tabs button, .filters button, .dg-pill,
+  .dg-promise .q, footer .closing, .song a{white-space:nowrap}
+  .song{display:flex;align-items:baseline;gap:2px;flex-wrap:nowrap;overflow:hidden}
+  .tl-item h3, .dg-box h3, .song-cat h3{line-break:strict}
 </style>
 </head>
 <body data-filter="all">
